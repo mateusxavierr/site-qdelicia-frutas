@@ -1,11 +1,10 @@
-# Publica o export estático (pasta out/) no branch gh-pages.
+# Next.js estático (output: export) → GitHub Pages via Actions.
+# Settings → Pages → Source: GitHub Actions (não "Deploy from a branch").
+# BASE_PATH = "/<nome-do-repo>" para https://<user>.github.io/<repo>/
 #
-# Depois do primeiro deploy bem-sucedido, configure:
-#   Settings → Pages → Build and deployment → Source: Deploy from a branch
-#   Branch: gh-pages  /  Folder: / (root)
-#
-# URL: https://mateusxavierr.github.io/site-qdelicia-frutas/
-name: Deploy to GitHub Pages
+# Não usamos actions/configure-pages (static_site_generator: next) para não
+# sobrescrever o next.config.mjs do projeto.
+name: Deploy Next.js site to Pages
 
 on:
   push:
@@ -13,42 +12,64 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
+  pages: write
+  id-token: write
 
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     env:
       CI: true
       NODE_ENV: production
       BASE_PATH: /site-qdelicia-frutas
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
           node-version: "20"
           cache: npm
 
-      - name: Install and build
-        run: |
-          npm ci
-          npm run build
+      - name: Restore Next.js cache
+        uses: actions/cache@v4
+        with:
+          path: .next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx', '**/*.mjs') }}
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
 
-      - name: Validate export
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build with Next.js
+        run: npm run build
+
+      - name: Validate static export
         run: |
           test -f out/index.html
           test -f out/.nojekyll
           test -d out/_next
           test -s out/index.html
 
-      - name: Push out/ to gh-pages branch
-        uses: peaceiris/actions-gh-pages@v4
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./out
-          force_orphan: true
+          path: ./out
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
