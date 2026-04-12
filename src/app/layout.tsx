@@ -1,4 +1,6 @@
+import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Newsreader, DM_Mono } from "next/font/google";
+import { asset } from "@/lib/assetPath";
 import "./globals.css";
 
 const plusJakarta = Plus_Jakarta_Sans({
@@ -21,9 +23,13 @@ const dmMono = DM_Mono({
   display: "swap",
 });
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "QDelícia Frutas - Distribuição B2B",
   description: "Produção e distribuição de frutas, verduras e legumes em PE, AL, PB e RN.",
+  icons: {
+    icon: asset("/assets/brand/logo-qdelicia.png"),
+    apple: asset("/assets/brand/logo-qdelicia.png"),
+  },
 };
 
 export default function RootLayout({

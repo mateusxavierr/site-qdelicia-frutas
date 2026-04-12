@@ -108,12 +108,12 @@ export function Header() {
         <div className="flex min-w-0 justify-start lg:justify-center lg:pl-1">
           <Link href="#hero" className="group inline-flex shrink-0 items-center py-1">
             <Image
-              src={asset("/assets/brand/logo-qdelicia.png")}
+              src={asset("/assets/brand/logo-qdelicia-retangular.png")}
               alt="QDelícia Frutas"
               width={243}
               height={165}
               priority
-              className="h-[3.15rem] w-auto max-w-[min(236px,50vw)] object-contain object-center transition-[transform,filter] duration-500 ease-out group-hover:scale-[1.03] sm:h-14 sm:max-w-[248px]"
+              className="h-[3.15rem] w-auto max-w-[min(260px,50vw)] shrink-0 object-contain object-center transition-[transform,filter] duration-500 ease-out group-hover:scale-[1.03] sm:h-14 sm:max-w-[260px]"
             />
           </Link>
         </div>
