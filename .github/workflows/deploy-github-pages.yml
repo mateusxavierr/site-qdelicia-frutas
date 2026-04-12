@@ -1,6 +1,10 @@
-# Deploy estático (next export) para GitHub Pages.
-# Settings → Pages → Source: GitHub Actions (não "Deploy from a branch").
-# Abra: https://mateusxavierr.github.io/site-qdelicia-frutas/ (com o nome do repo no path).
+# Publica o export estático (pasta out/) no branch gh-pages.
+#
+# Depois do primeiro deploy bem-sucedido, configure:
+#   Settings → Pages → Build and deployment → Source: Deploy from a branch
+#   Branch: gh-pages  /  Folder: / (root)
+#
+# URL: https://mateusxavierr.github.io/site-qdelicia-frutas/
 name: Deploy to GitHub Pages
 
 on:
@@ -9,16 +13,14 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 concurrency:
   group: pages
   cancel-in-progress: true
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     env:
       CI: true
@@ -37,26 +39,16 @@ jobs:
           npm ci
           npm run build
 
-      - name: Validate export (index, _next, .nojekyll)
+      - name: Validate export
         run: |
           test -f out/index.html
           test -f out/.nojekyll
           test -d out/_next
           test -s out/index.html
-          ls -la out | head -20
 
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Push out/ to gh-pages branch
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          path: out
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./out
+          force_orphan: true
