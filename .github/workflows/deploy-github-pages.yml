@@ -25,8 +25,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CI: true
-      NODE_ENV: production
       BASE_PATH: /site-qdelicia-frutas
+      # Não definir NODE_ENV=production no job: npm ci omitiria devDependencies
+      # (tailwindcss, postcss, typescript…) e o next build quebra.
     steps:
       - name: Checkout
         uses: actions/checkout@v4
