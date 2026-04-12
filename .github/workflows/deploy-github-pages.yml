@@ -1,6 +1,6 @@
 # Deploy estático (next export) para GitHub Pages.
-# Settings → Pages → Build and deployment → Source: GitHub Actions
-# URL: https://<user>.github.io/site-qdelicia-frutas/
+# Settings → Pages → Source: GitHub Actions (não "Deploy from a branch").
+# Abra: https://mateusxavierr.github.io/site-qdelicia-frutas/ (com o nome do repo no path).
 name: Deploy to GitHub Pages
 
 on:
@@ -20,6 +20,10 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      CI: true
+      NODE_ENV: production
+      BASE_PATH: /site-qdelicia-frutas
     steps:
       - uses: actions/checkout@v4
 
@@ -29,14 +33,17 @@ jobs:
           cache: npm
 
       - name: Install and build
-        env:
-          # Deve ser "/<nome-exato-do-repositório>" para projeto em github.io/<repo>/
-          BASE_PATH: /site-qdelicia-frutas
         run: |
           npm ci
           npm run build
+
+      - name: Validate export (index, _next, .nojekyll)
+        run: |
           test -f out/index.html
           test -f out/.nojekyll
+          test -d out/_next
+          test -s out/index.html
+          ls -la out | head -20
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

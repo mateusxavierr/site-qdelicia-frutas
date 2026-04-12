@@ -7,8 +7,11 @@ const nextConfig = {
   env: {
     NEXT_PUBLIC_BASE_PATH: basePath,
   },
-  ...(process.env.NODE_ENV === "production" ? { output: "export" } : {}),
-  ...(basePath ? { basePath, trailingSlash: true } : {}),
+  // CI: garante export estático mesmo se NODE_ENV estiver estranho no runner
+  ...(process.env.NODE_ENV === "production" || process.env.CI === "true"
+    ? { output: "export" }
+    : {}),
+  ...(basePath ? { basePath, trailingSlash: false } : {}),
   images: {
     unoptimized: true,
   },
