@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>QDelícia Frutas — Design System v7 (consolidação)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Newsreader:ital,opsz,wght@0,6..72,400..800;1,6..72,400..800&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet"/>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            qgreen: {
+              50: '#F4F9EE', 100: '#E8F3DE', 200: '#CFE6B6', 300: '#B6D98F',
+              400: '#9DCC67', 500: '#85C226', 600: '#6A9B1E', 700: '#507415',
+              800: '#354D0F', 900: '#1B2708',
+            },
+            qpurple: {
+              50: '#F6EDFA', 100: '#EEDCF5', 200: '#D4B0EA', 300: '#BA84DF',
+              400: '#9F58D4', 500: '#6A1B9A', 600: '#55167B', 700: '#40105C',
+              800: '#2A0B3E', 900: '#15051F',
+            },
+            qneutral: {
+              50: '#FFFFFF', 100: '#F9F8F6', 200: '#EBE9E1', 300: '#D6D3CA',
+              400: '#A3A097', 500: '#78756C', 600: '#57534E', 700: '#403D39',
+              800: '#292524', 900: '#1A1918',
+            },
+            /* Terra / ink — contraste pontual (herança v6), sem substituir a paleta principal */
+            qearth: {
+              ink: '#2c2825',
+              muted: '#5c534c',
+              mist: '#e8e4db',
+            },
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+            serif: ['Newsreader', 'Georgia', 'serif'],
+            mono: ['"DM Mono"', 'ui-monospace', 'monospace'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    /* v7: Plus Jakarta = UI/corpo; Newsreader = apenas H1/H2; DM Mono = tokens/specs */
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      background-color: #F9F8F6;
+      color: #1A1918;
+      overflow-x: hidden;
+    }
+    .font-editorial { font-family: 'Newsreader', Georgia, serif; }
+
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #F9F8F6; }
+    ::-webkit-scrollbar-thumb { background: #D1D5DB; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #85C226; }
+
+    html { scroll-behavior: smooth; }
+
+    @keyframes animationIn {
+      0% { opacity: 0; transform: translateY(18px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeSlideIn {
+      0% { opacity: 0; transform: translateY(22px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .animate-on-scroll { animation-play-state: paused !important; opacity: 0; }
+    .animate-on-scroll.animate { animation-play-state: running !important; opacity: 1; }
+
+    /* Beams: mantidos só como referência técnica no DS (ver seção Motion); não usar no site público */
+    @keyframes beam-fall {
+      0% { transform: translateY(-100%); opacity: 0; }
+      8% { opacity: 0.28; }
+      50% { opacity: 0.45; }
+      92% { opacity: 0.22; }
+      100% { transform: translateY(120vh); opacity: 0; }
+    }
+    .animate-beam-1 { animation: beam-fall 7s linear infinite; }
+    .animate-beam-2 { animation: beam-fall 9s linear infinite 2s; }
+    .animate-beam-3 { animation: beam-fall 8s linear infinite 4s; }
+
+    @keyframes mesh-drift {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(1.5%, -1.5%) scale(1.02); }
+    }
+    .qd-hero-mesh {
+      position: absolute;
+      inset: -18%;
+      background:
+        radial-gradient(ellipse 78% 58% at 22% 28%, rgba(133, 194, 38, 0.14) 0%, transparent 55%),
+        radial-gradient(ellipse 68% 48% at 82% 18%, rgba(106, 27, 154, 0.11) 0%, transparent 50%),
+        radial-gradient(ellipse 58% 38% at 52% 88%, rgba(106, 27, 154, 0.07) 0%, transparent 45%);
+      animation: mesh-drift 20s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .glass-panel {
+      background: rgba(253, 252, 251, 0.9);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(235, 233, 225, 0.9);
+      box-shadow: 0 8px 32px rgba(26, 25, 24, 0.04);
+    }
+
+    .btn-glow-purple {
+      position: relative;
+      background: #6A1B9A;
+      color: white;
+      z-index: 1;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .btn-glow-purple::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      z-index: -1;
+      background: linear-gradient(90deg, #6A1B9A, #85C226, #6A1B9A);
+      background-size: 200% 200%;
+      filter: blur(10px);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      border-radius: inherit;
+    }
+    .btn-glow-purple:hover::before { opacity: 0.22; }
+    .btn-glow-purple:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(106, 27, 154, 0.18); }
+
+    .btn-glow-green {
+      position: relative;
+      background: #85C226;
+      color: #1A1918;
+      z-index: 1;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .btn-glow-green::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      z-index: -1;
+      background: linear-gradient(90deg, #85C226, #6A1B9A, #85C226);
+      background-size: 200% 200%;
+      filter: blur(10px);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      border-radius: inherit;
+    }
+    .btn-glow-green:hover::before { opacity: 0.18; }
+    .btn-glow-green:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(133, 194, 38, 0.2); }
+
+    .card-premium {
+      transition: transform 0.35s cubic-bezier(0.34, 1.2, 0.64, 1), box-shadow 0.35s ease, border-color 0.25s ease;
+    }
+    .card-premium:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 20px 40px -12px rgba(26, 25, 24, 0.1);
+      border-color: rgba(26, 25, 24, 0.1);
+    }
+
+    .bg-pattern-dots {
+      background-image: radial-gradient(rgba(26, 25, 24, 0.045) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+    .bg-pattern-grid {
+      background-image:
+        linear-gradient(rgba(26, 25, 24, 0.028) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(26, 25, 24, 0.028) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+    .bg-pattern-grid-light {
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+      background-size: 32px 32px;
+    }
+
+    .ds-section { scroll-margin-top: 88px; }
+
+    /* Textura só no hero: malha de pontos (não afeta cliques) */
+    .hero-texture-dots {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 1;
+      background-image: radial-gradient(rgba(26, 25, 24, 0.11) 1.25px, transparent 1.25px);
+      background-size: 18px 18px;
+    }
+
+    /* Hero: painel único + leve zoom no hover (sem colunas / blinds) */
+    .hero-visual-panel img {
+      transition: transform 0.75s cubic-bezier(0.33, 1, 0.68, 1);
+    }
+    .hero-visual-panel:hover img { transform: scale(1.03); }
+
+    .typography-spec { width: 100%; border-collapse: collapse; }
+    .typography-spec tr { border-bottom: 1px solid rgba(26, 25, 24, 0.08); }
+    .typography-spec td { padding: 1rem 0.5rem; vertical-align: top; }
+    .typography-spec td:first-child {
+      width: 120px;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #6A1B9A;
+    }
+    .typography-spec td:nth-child(2) { font-size: 0.8125rem; color: #57534e; }
+    .typography-spec td:last-child {
+      text-align: right;
+      font-size: 0.6875rem;
+      color: #78756C;
+      font-family: 'DM Mono', monospace;
+    }
+
+    .qd-modal-backdrop { opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+    .qd-modal-backdrop.is-open { opacity: 1; pointer-events: auto; }
+    .qd-modal-panel {
+      transform: scale(0.97) translateY(10px);
+      opacity: 0;
+      transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.28s ease;
+    }
+    .qd-modal-backdrop.is-open .qd-modal-panel { transform: scale(1) translateY(0); opacity: 1; }
+
+    .nav-link-ds {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: #78756C;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-link-ds:hover { color: #6A1B9A; }
+  </style>
+</head>
+
+<body class="bg-qneutral-100 text-qneutral-900 antialiased selection:bg-qgreen-500/25 selection:text-qpurple-900">
+
+  <nav class="sticky top-0 z-50 w-full glass-panel border-b border-qneutral-200/60">
+    <div class="max-w-[1400px] mx-auto px-6 lg:px-12 h-[4.5rem] flex items-center justify-between gap-4">
+      <a href="#hero" class="flex items-center gap-3 group shrink-0">
+        <img src="assets/brand/logo-qdelicia.png" alt="QDelícia" class="h-10 w-auto transition-transform duration-300 group-hover:scale-[1.02]"
+          onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgdmlld0JveD0iMCAwIDQwIDQwIj48cmVjdCB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHJ4PSI4IiBmaWxsPSIjODVDMjI2Ii8+PGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMTAiIGZpbGw9IiM2QTFCOUEiLz48L3N2Zz4='"/>
+        <span class="hidden sm:flex flex-col leading-tight">
+          <span class="text-xl font-semibold text-qneutral-900 tracking-tight">QDelícia</span>
+          <span class="text-[10px] uppercase tracking-[0.18em] text-qneutral-500 font-semibold">Design System v7</span>
+        </span>
+      </a>
+      <div class="hidden lg:flex items-center gap-7 flex-wrap justify-end">
+        <a href="#hero" class="nav-link-ds">Hero</a>
+        <a href="#typography" class="nav-link-ds">Tipografia</a>
+        <a href="#colors" class="nav-link-ds">Cores</a>
+        <a href="#components" class="nav-link-ds">Componentes</a>
+        <a href="#produtos" class="nav-link-ds">Produtos</a>
+        <a href="#layout" class="nav-link-ds">Layout</a>
+        <a href="#motion" class="nav-link-ds">Motion</a>
+        <a href="#icons" class="nav-link-ds">Ícones</a>
+      </div>
+      <div class="flex items-center gap-2">
+        <button type="button" onclick="document.getElementById('qd-demo-modal').classList.add('is-open')" class="hidden sm:inline-flex btn-glow-green px-5 py-2.5 rounded-full text-sm font-semibold items-center gap-2">
+          Área do cliente
+          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <main class="relative z-10">
+
+    <!-- Hero: copy v5 + visual em painel único (sem strips) -->
+    <section id="hero" class="ds-section relative overflow-hidden border-b border-qneutral-200/80">
+      <div class="qd-hero-mesh"></div>
+      <div class="absolute inset-0 pointer-events-none opacity-[0.35]"
+        style="background-image: url('https://images.unsplash.com/photo-1610832958506-aa56368176cf?w=1600&q=80'); background-size: cover; background-position: center;"></div>
+      <div class="absolute inset-0 bg-gradient-to-b from-qneutral-100/95 via-qneutral-100/88 to-qneutral-100"></div>
+      <div class="hero-texture-dots" aria-hidden="true"></div>
+      <div class="absolute top-28 right-[10%] w-64 h-64 rounded-full bg-qgreen-500/12 blur-[72px] pointer-events-none z-[2]"></div>
+      <div class="absolute bottom-24 left-[6%] w-56 h-56 rounded-full bg-qpurple-500/10 blur-[64px] pointer-events-none z-[2]"></div>
+
+      <div class="max-w-[1400px] mx-auto px-6 lg:px-12 pt-16 pb-24 lg:pt-24 lg:pb-32 relative z-10">
+        <div class="grid lg:grid-cols-12 gap-14 lg:gap-10 items-center">
+          <div class="lg:col-span-6 order-2 lg:order-1">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-qneutral-200 bg-white/70 backdrop-blur-md text-qneutral-600 mb-7 shadow-sm animate-on-scroll [animation:fadeSlideIn_0.75s_ease-out_0.05s_both]">
+              <span class="w-2 h-2 rounded-full bg-qgreen-500 shadow-[0_0_10px_rgba(133,194,38,0.45)]"></span>
+              <span class="text-[11px] font-bold uppercase tracking-[0.16em] text-qneutral-600">Distribuição B2B premium</span>
+            </div>
+
+            <h1 class="font-editorial text-[2.6rem] sm:text-5xl md:text-6xl lg:text-[3.5rem] leading-[1.06] tracking-tight text-qneutral-900 mb-6 animate-on-scroll [animation:fadeSlideIn_0.85s_ease-out_0.12s_both]">
+              O frescor do campo.<br/>
+              <span class="text-qpurple-600 italic">A força do negócio.</span>
+            </h1>
+
+            <p class="text-lg md:text-xl text-qneutral-600 max-w-xl leading-relaxed mb-9 animate-on-scroll [animation:fadeSlideIn_0.85s_ease-out_0.22s_both]">
+              Sistema visual consolidado para a QDelícia Frutas: claro para decisão comercial, com profundidade e presença de marca — sem ruído experimental.
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-4 mb-10 animate-on-scroll [animation:fadeSlideIn_0.85s_ease-out_0.32s_both]">
+              <button type="button" onclick="document.getElementById('qd-demo-modal').classList.add('is-open')" class="btn-glow-green px-8 py-3.5 rounded-full text-sm font-semibold inline-flex items-center justify-center gap-2">
+                Solicitar cotação
+                <i data-lucide="arrow-right" class="w-4 h-4"></i>
+              </button>
+              <a href="#typography" class="px-8 py-3.5 rounded-full border border-qneutral-200 bg-white/90 text-qneutral-800 text-sm font-semibold inline-flex items-center justify-center gap-2 hover:border-qpurple-300 hover:bg-white transition-all shadow-sm">
+                <i data-lucide="book-open" class="w-4 h-4 text-qpurple-600"></i>
+                Ver tipografia
+              </a>
+            </div>
+
+            <p class="text-sm font-semibold text-qneutral-600 border-l-[3px] border-qpurple-500/40 pl-4 max-w-md animate-on-scroll [animation:animationIn_0.75s_ease-out_0.45s_both]">
+              Da horta à operação: padronização de caixas, rastreio e entrega programada para o seu time de compras.
+            </p>
+          </div>
+
+          <div class="lg:col-span-6 order-1 lg:order-2">
+            <div class="relative w-full max-w-md mx-auto lg:max-w-none lg:pr-4 animate-on-scroll [animation:fadeSlideIn_1s_ease-out_0.2s_both]">
+              <!-- Halo discreto atrás do painel -->
+              <div class="absolute -inset-4 rounded-[2rem] bg-gradient-to-br from-qgreen-500/12 via-transparent to-qpurple-500/10 blur-2xl -z-10 pointer-events-none" aria-hidden="true"></div>
+              <div class="absolute top-8 right-4 lg:right-8 w-48 h-48 rounded-full border border-qneutral-200/70 -z-10 pointer-events-none hidden sm:block" aria-hidden="true"></div>
+
+              <div class="hero-visual-panel relative rounded-3xl overflow-hidden border border-qneutral-200/90 shadow-[0_24px_60px_-20px_rgba(26,25,24,0.18)] aspect-[4/5] max-h-[440px] sm:max-h-[480px] lg:max-h-[520px] mx-auto">
+                <img
+                  src="https://images.unsplash.com/photo-1540420773420-3366772f4999?w=1200&q=80"
+                  alt="Seleção de frutas e vegetais frescos"
+                  class="w-full h-full object-cover object-center"
+                  width="800"
+                  height="1000"
+                  loading="eager"
+                  decoding="async"
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-qneutral-900/55 via-qneutral-900/10 to-transparent pointer-events-none"></div>
+                <div class="absolute top-4 right-4">
+                  <span class="inline-flex items-center gap-1.5 rounded-full bg-white/90 backdrop-blur-sm px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-qneutral-700 border border-qneutral-200/80 shadow-sm">
+                    <i data-lucide="leaf" class="w-3.5 h-3.5 text-qgreen-600"></i>
+                    Origem rastreada
+                  </span>
+                </div>
+                <div class="absolute bottom-0 left-0 right-0 p-6 sm:p-7">
+                  <p class="text-[10px] uppercase tracking-[0.2em] text-white/75 font-semibold mb-1">Linha B2B</p>
+                  <p class="text-lg sm:text-xl font-semibold text-white leading-snug">Frutas, legumes e verduras com padrão de caixa e safra.</p>
+                </div>
+              </div>
+
+              <!-- Card flutuante (âncora comercial, estilo v5) -->
+              <div class="mt-6 lg:mt-0 lg:absolute lg:-bottom-2 lg:-left-2 xl:-left-4 w-full max-w-[300px] mx-auto lg:mx-0">
+                <div class="glass-panel rounded-2xl p-5 sm:p-6 border border-white/90 shadow-xl">
+                  <div class="flex items-center justify-between gap-3 mb-4">
+                    <span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-qgreen-50 text-qgreen-800 border border-qgreen-200/60">Atacado</span>
+                    <i data-lucide="trending-up" class="w-5 h-5 text-qpurple-600 shrink-0"></i>
+                  </div>
+                  <p class="text-xs text-qneutral-500 uppercase tracking-wider font-semibold mb-1">Próximo passo</p>
+                  <p class="text-base font-semibold text-qneutral-900 mb-4">Cotação e disponibilidade por região</p>
+                  <button type="button" onclick="document.getElementById('qd-demo-modal').classList.add('is-open')" class="w-full btn-glow-green py-2.5 rounded-xl text-sm font-semibold shadow-sm">
+                    Falar com consultor
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tipografia: regra fechada -->
+    <section id="typography" class="ds-section relative w-full bg-qneutral-50 py-24 border-t border-qneutral-200 bg-pattern-dots">
+      <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+        <header class="mb-14">
+          <h2 class="font-editorial text-4xl md:text-5xl font-medium text-qneutral-900 mb-4">Tipografia</h2>
+          <p class="text-lg text-qneutral-600 max-w-2xl leading-relaxed">
+            <strong class="text-qneutral-900">Newsreader</strong> em H1, H2 e no <strong class="text-qneutral-900">título do nome do produto</strong> em cards de catálogo, além do <strong class="text-qneutral-900">título principal</strong> em cards institucionais escuros (<span class="font-mono text-xs bg-qneutral-100 px-1 rounded">qearth-ink</span>) — contraste editorial dentro do bloco; o restante do card permanece em sans. <strong class="text-qneutral-900">Plus Jakarta Sans</strong> em UI geral, status, formulários e navegação. <strong class="font-mono text-sm text-qpurple-600">DM Mono</strong> só para tokens e specs.
+          </p>
+        </header>
+
+        <div class="overflow-x-auto rounded-2xl border border-qneutral-200 bg-white shadow-sm mb-12">
+          <table class="typography-spec min-w-[640px]">
+            <thead>
+              <tr class="bg-qneutral-100/80">
+                <td class="!pt-4 !pb-4 font-sans">Papel</td>
+                <td class="!pt-4 !pb-4 font-sans">Uso</td>
+                <td class="!pt-4 !pb-4">Especificação</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>h1</td><td>Página / hero</td><td>Newsreader / 2.6rem–3.5rem / 1.06 / medium</td></tr>
+              <tr><td>h2</td><td>Seções do DS e da página</td><td>Newsreader / 2.25rem–3rem / 1.1 / medium</td></tr>
+              <tr><td>h3–h6</td><td>UI, subtítulos, cards utilitários</td><td>Plus Jakarta / 600–700 / escala 1.125–1.5rem</td></tr>
+              <tr><td>título · card produto</td><td>Nome do produto no card</td><td>Newsreader / 1.125–1.25rem / medium / tracking-tight</td></tr>
+              <tr><td>título · card escuro</td><td>Headline em card qearth-ink</td><td>Newsreader / 1.25–1.5rem / medium / branco</td></tr>
+              <tr><td>body</td><td>Parágrafos, listas, formulários</td><td>Plus Jakarta 400 / 1rem / 1.6</td></tr>
+              <tr><td>label</td><td>Formulário, navegação</td><td>Plus Jakarta 600 / uppercase / tracking amplo</td></tr>
+              <tr><td>mono</td><td>Tokens, valores técnicos</td><td>DM Mono 400–500 / 0.6875–0.75rem</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="flex flex-col border-t border-qneutral-200">
+          <div class="py-7 flex flex-col md:flex-row md:items-center border-b border-qneutral-200 gap-5 hover:bg-qneutral-100/60 transition-colors px-3 -mx-3 rounded-xl">
+            <div class="w-44 shrink-0"><span class="text-xs uppercase tracking-widest text-qneutral-400 font-bold">H1</span></div>
+            <div class="flex-grow"><h1 class="font-editorial text-5xl md:text-6xl font-medium tracking-tight text-qneutral-900 leading-tight">Colheita do dia</h1></div>
+            <div class="shrink-0 font-mono text-xs text-qneutral-500">Newsreader</div>
+          </div>
+          <div class="py-7 flex flex-col md:flex-row md:items-center border-b border-qneutral-200 gap-5 hover:bg-qneutral-100/60 transition-colors px-3 -mx-3 rounded-xl">
+            <div class="w-44 shrink-0"><span class="text-xs uppercase tracking-widest text-qneutral-400 font-bold">H2</span></div>
+            <div class="flex-grow"><h2 class="font-editorial text-3xl md:text-4xl font-medium tracking-tight text-qneutral-900">Catálogo e logística</h2></div>
+            <div class="shrink-0 font-mono text-xs text-qneutral-500">Newsreader</div>
+          </div>
+          <div class="py-7 flex flex-col md:flex-row md:items-center border-b border-qneutral-200 gap-5 hover:bg-qneutral-100/60 transition-colors px-3 -mx-3 rounded-xl">
+            <div class="w-44 shrink-0"><span class="text-xs uppercase tracking-widest text-qneutral-400 font-bold">H3 · UI</span></div>
+            <div class="flex-grow"><h3 class="font-sans text-2xl font-semibold tracking-tight text-qneutral-900">Portal do cliente B2B</h3></div>
+            <div class="shrink-0 font-mono text-xs text-qneutral-500">Plus Jakarta</div>
+          </div>
+          <div class="py-7 flex flex-col md:flex-row md:items-center border-b border-qneutral-200 gap-5 hover:bg-qneutral-100/60 transition-colors px-3 -mx-3 rounded-xl">
+            <div class="w-44 shrink-0"><span class="text-xs uppercase tracking-widest text-qneutral-400 font-bold">Body</span></div>
+            <div class="flex-grow"><p class="font-sans text-base text-qneutral-600 leading-relaxed max-w-2xl">Texto comercial direto: prazos, volumes e padrão de caixa — sempre legível, sem ornamentação desnecessária.</p></div>
+            <div class="shrink-0 font-mono text-xs text-qneutral-500">Plus Jakarta</div>
+          </div>
+          <div class="py-7 flex flex-col md:flex-row md:items-center border-b border-qneutral-200 gap-5 hover:bg-qneutral-100/60 transition-colors px-3 -mx-3 rounded-xl">
+            <div class="w-44 shrink-0"><span class="text-xs uppercase tracking-widest text-qneutral-400 font-bold">Card · produto</span></div>
+            <div class="flex-grow"><p class="font-editorial text-lg font-medium tracking-tight text-qneutral-900">Banana prata premium</p><p class="text-xs text-qneutral-500 mt-1 font-sans">Corpo, badge e CTA do mesmo card em Plus Jakarta.</p></div>
+            <div class="shrink-0 font-mono text-xs text-qneutral-500">Newsreader</div>
+          </div>
+          <div class="py-7 flex flex-col md:flex-row md:items-center gap-5 px-3 -mx-3 rounded-xl hover:bg-qneutral-100/60 transition-colors">
+            <div class="w-44 shrink-0"><span class="text-xs uppercase tracking-widest text-qneutral-400 font-bold">Eyebrow</span></div>
+            <div class="flex-grow"><span class="font-sans text-xs font-semibold uppercase tracking-[0.14em] text-qpurple-600">Categoria homologada</span></div>
+            <div class="shrink-0 font-mono text-xs text-qneutral-500">Plus Jakarta</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cores -->
+    <section id="colors" class="ds-section w-full bg-qneutral-100 py-24 border-t border-qneutral-200">
+      <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+        <header class="mb-14">
+          <h2 class="font-editorial text-4xl md:text-5xl font-medium text-qneutral-900 mb-4">Cores e <span class="text-qpurple-600 italic">superfícies</span></h2>
+          <p class="text-lg text-qneutral-600 max-w-2xl">Base clara e quente (v5), verde e roxo de marca, neutros para leitura. Tons <span class="font-mono text-sm bg-qneutral-200/80 px-1 rounded text-qneutral-800">qearth.ink</span> para contraste pontual no hero, cards escuros e rodapé — sem escurecer o sistema inteiro.</p>
+        </header>
+
+        <h3 class="text-xs font-bold uppercase tracking-widest text-qneutral-400 mb-5">Marca</h3>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-14">
+          <div class="group">
+            <div class="h-28 rounded-2xl bg-qgreen-500 border border-black/5 mb-2 group-hover:-translate-y-0.5 transition-transform shadow-sm"></div>
+            <span class="text-sm font-semibold text-qneutral-900">Verde frescor</span>
+            <p class="font-mono text-[11px] text-qneutral-500">qgreen-500 · #85C226</p>
+          </div>
+          <div class="group">
+            <div class="h-28 rounded-2xl bg-qpurple-500 border border-black/5 mb-2 group-hover:-translate-y-0.5 transition-transform shadow-sm"></div>
+            <span class="text-sm font-semibold text-qneutral-900">Roxo premium</span>
+            <p class="font-mono text-[11px] text-qneutral-500">qpurple-500 · #6A1B9A</p>
+          </div>
+          <div class="group">
+            <div class="h-28 rounded-2xl bg-qneutral-900 border border-black/5 mb-2 group-hover:-translate-y-0.5 transition-transform shadow-sm"></div>
+            <span class="text-sm font-semibold text-qneutral-900">Neutro escuro</span>
+            <p class="font-mono text-[11px] text-qneutral-500">qneutral-900</p>
+          </div>
+          <div class="group">
+            <div class="h-28 rounded-2xl bg-qearth-ink border border-white/10 mb-2 group-hover:-translate-y-0.5 transition-transform shadow-sm"></div>
+            <span class="text-sm font-semibold text-qneutral-900">Ink terroso</span>
+            <p class="font-mono text-[11px] text-qneutral-500">#2c2825 · painéis</p>
+          </div>
+        </div>
+
+        <h3 class="text-xs font-bold uppercase tracking-widest text-qneutral-400 mb-5">Superfícies</h3>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div><div class="h-20 rounded-xl bg-qneutral-50 border border-qneutral-200 mb-2"></div><span class="text-sm font-medium">Papel / cartão</span><p class="font-mono text-[11px] text-qneutral-500">qneutral-50</p></div>
+          <div><div class="h-20 rounded-xl bg-qneutral-100 border border-qneutral-200 mb-2"></div><span class="text-sm font-medium">Fundo página</span><p class="font-mono text-[11px] text-qneutral-500">qneutral-100</p></div>
+          <div><div class="h-20 rounded-xl bg-qneutral-200 mb-2"></div><span class="text-sm font-medium">Bordas</span><p class="font-mono text-[11px] text-qneutral-500">qneutral-200</p></div>
+          <div><div class="h-20 rounded-xl bg-qgreen-50 border border-qgreen-200/60 mb-2"></div><span class="text-sm font-medium">Sucesso suave</span><p class="font-mono text-[11px] text-qneutral-500">qgreen-50</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Componentes: estrutura v5 + feedback v6 -->
+    <section id="components" class="ds-section relative w-full bg-qneutral-50 py-24 border-t border-qneutral-200 bg-pattern-grid">
+      <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+        <header class="mb-14">
+          <h2 class="font-editorial text-4xl md:text-5xl font-medium text-qneutral-900 mb-4">Componentes <span class="text-qpurple-600 italic">B2B</span></h2>
+          <p class="text-lg text-qneutral-600 max-w-2xl">Prioridade para clareza comercial: <strong class="text-qneutral-800">CTA primário em verde</strong> (conversão); roxo em acentos editoriais (eyebrows, links, estados selecionados). Formulários diretos e cards escaneáveis.</p>
+        </header>
+
+        <div class="mb-16">
+          <h3 class="text-lg font-semibold mb-5 text-qneutral-900">Botões</h3>
+          <div class="flex flex-wrap gap-5 items-center bg-white p-8 rounded-2xl border border-qneutral-200 shadow-sm">
+            <button type="button" class="btn-glow-green px-6 py-3 rounded-xl text-sm font-semibold inline-flex items-center gap-2">Primário (verde) <i data-lucide="arrow-right" class="w-4 h-4"></i></button>
+            <button type="button" class="btn-glow-purple px-6 py-3 rounded-xl text-sm font-semibold inline-flex items-center gap-2">Acento / editorial <i data-lucide="sparkles" class="w-4 h-4"></i></button>
+            <button type="button" class="px-6 py-3 bg-white border border-qneutral-300 text-qneutral-800 rounded-xl text-sm font-semibold hover:bg-qneutral-50 hover:border-qneutral-400 transition-colors">Secundário</button>
+            <a href="#motion" class="text-sm font-semibold text-qneutral-600 inline-flex items-center gap-1 group hover:text-qpurple-600 transition-colors">
+              Link com seta <i data-lucide="chevron-right" class="w-4 h-4 group-hover:translate-x-0.5 transition-transform"></i>
+            </a>
+          </div>
+        </div>
+
+        <div class="mb-16">
+          <h3 class="text-lg font-semibold mb-5 text-qneutral-900">Formulários</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-10 bg-white p-8 rounded-2xl border border-qneutral-200 shadow-sm">
+            <div class="space-y-5">
+              <div>
+                <label class="block text-sm font-semibold text-qneutral-700 mb-1.5">Razão social</label>
+                <div class="relative">
+                  <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"><i data-lucide="building" class="w-4 h-4 text-qneutral-400"></i></div>
+                  <input type="text" class="w-full pl-11 pr-4 py-3 rounded-lg border border-qneutral-300 focus:border-qgreen-500 focus:ring-2 focus:ring-qgreen-500/20 outline-none transition-all bg-qneutral-50 text-sm" placeholder="Nome da empresa"/>
+                </div>
+              </div>
+              <div>
+                <label class="block text-sm font-semibold text-qneutral-700 mb-1.5">E-mail corporativo</label>
+                <div class="relative">
+                  <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"><i data-lucide="mail" class="w-4 h-4 text-qneutral-400"></i></div>
+                  <input type="email" class="w-full pl-11 pr-4 py-3 rounded-lg border border-qneutral-300 focus:border-qgreen-500 focus:ring-2 focus:ring-qgreen-500/20 outline-none transition-all bg-qneutral-50 text-sm" placeholder="compras@empresa.com"/>
+                </div>
+              </div>
+              <div>
+                <label class="block text-sm font-semibold text-qneutral-700 mb-1.5">UF — região de entrega</label>
+                <div class="relative">
+                  <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"><i data-lucide="map-pin" class="w-4 h-4 text-qneutral-400"></i></div>
+                  <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none"><i data-lucide="chevron-down" class="w-4 h-4 text-qneutral-400"></i></div>
+                  <select class="w-full pl-11 pr-10 py-3 rounded-lg border border-qneutral-300 focus:border-qgreen-500 focus:ring-2 focus:ring-qgreen-500/20 outline-none transition-all bg-qneutral-50 text-sm appearance-none cursor-pointer">
+                    <option value="">Selecione o estado</option>
+                    <option value="AC">Acre</option>
+                    <option value="AL">Alagoas</option>
+                    <option value="AP">Amapá</option>
+                    <option value="AM">Amazonas</option>
+                    <option value="BA">Bahia</option>
+                    <option value="CE">Ceará</option>
+                    <option value="DF">Distrito Federal</option>
+                    <option value="ES">Espírito Santo</option>
+                    <option value="GO">Goiás</option>
+                    <option value="MA">Maranhão</option>
+                    <option value="MT">Mato Grosso</option>
+                    <option value="MS">Mato Grosso do Sul</option>
+                    <option value="MG">Minas Gerais</option>
+                    <option value="PA">Pará</option>
+                    <option value="PB">Paraíba</option>
+                    <option value="PR">Paraná</option>
+                    <option value="PE">Pernambuco</option>
+                    <option value="PI">Piauí</option>
+                    <option value="RJ">Rio de Janeiro</option>
+                    <option value="RN">Rio Grande do Norte</option>
+                    <option value="RS">Rio Grande do Sul</option>
+                    <option value="RO">Rondônia</option>
+                    <option value="RR">Roraima</option>
+                    <option value="SC">Santa Catarina</option>
+                    <option value="SP">São Paulo</option>
+                    <option value="SE">Sergipe</option>
+                    <option value="TO">Tocantins</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-semibold text-qneutral-700 mb-2">Perfil de compra</label>
+              <div class="grid grid-cols-2 gap-4">
+                <label class="cursor-pointer">
+                  <input type="radio" name="perfil-v7" class="peer sr-only" checked/>
+                  <div class="border border-qneutral-200 rounded-xl p-4 text-center peer-checked:border-qgreen-500 peer-checked:bg-qgreen-50 transition-all hover:border-qneutral-300 hover:bg-qneutral-50/80">
+                    <i data-lucide="store" class="w-5 h-5 mx-auto mb-2 text-qneutral-400 peer-checked:text-qgreen-600"></i>
+                    <span class="block text-sm font-semibold text-qneutral-600 peer-checked:text-qgreen-800">Varejo</span>
+                  </div>
+                </label>
+                <label class="cursor-pointer">
+                  <input type="radio" name="perfil-v7" class="peer sr-only"/>
+                  <div class="border border-qneutral-200 rounded-xl p-4 text-center peer-checked:border-qpurple-500 peer-checked:bg-qpurple-50 transition-all hover:border-qneutral-300 hover:bg-qneutral-50/80">
+                    <i data-lucide="truck" class="w-5 h-5 mx-auto mb-2 text-qneutral-400 peer-checked:text-qpurple-600"></i>
+                    <span class="block text-sm font-semibold text-qneutral-600 peer-checked:text-qpurple-800">Distribuição</span>
+                  </div>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="text-lg font-semibold mb-5 text-qneutral-900">Cards</h3>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="card-premium bg-white rounded-2xl overflow-hidden border border-qneutral-200 flex flex-col group">
+              <div class="aspect-[4/3] bg-qneutral-100 flex items-center justify-center border-b border-qneutral-100">
+                <i data-lucide="apple" class="w-12 h-12 text-qneutral-300 group-hover:scale-105 transition-transform duration-500"></i>
+              </div>
+              <div class="p-6 flex flex-col flex-grow">
+                <div class="flex justify-between items-start mb-2 gap-2">
+                  <h4 class="font-editorial text-lg font-medium tracking-tight text-qneutral-900">Maçã Gala extra</h4>
+                  <span class="px-2 py-0.5 bg-qgreen-50 text-qgreen-700 rounded text-[10px] font-bold uppercase shrink-0">Safra</span>
+                </div>
+                <p class="text-sm text-qneutral-500 mb-5">Padrão exportação. Ideal para hortifruti e operações que exigem consistência visual na gôndola.</p>
+                <div class="mt-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-qneutral-50 p-3 rounded-lg border border-qneutral-100">
+                  <div><span class="text-[10px] text-qneutral-500 uppercase font-semibold tracking-wide">Formato</span><span class="block text-sm font-medium text-qneutral-800">Caixa 18 kg</span></div>
+                  <button type="button" class="text-sm font-semibold text-qgreen-700 border border-qgreen-300 px-3 py-1.5 rounded-lg hover:bg-qgreen-50 transition-colors shrink-0">Cotar lote</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-premium rounded-2xl p-8 border border-qneutral-800 bg-qearth-ink text-white relative overflow-hidden">
+              <div class="absolute top-0 right-0 w-48 h-48 bg-qpurple-500/15 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none"></div>
+              <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-qgreen-400 mb-5 border border-white/10 relative z-10">
+                <i data-lucide="shield-check" class="w-5 h-5"></i>
+              </div>
+              <h4 class="font-editorial text-xl font-medium tracking-tight text-white mb-2 relative z-10">Qualidade auditada</h4>
+              <p class="text-sm text-white/70 leading-relaxed relative z-10 mb-6">Processos revisados na cadeia — linguagem séria para decisores.</p>
+              <a href="#" class="relative z-10 inline-flex items-center gap-2 text-qgreen-400 text-sm font-semibold hover:text-qgreen-300 transition-colors group/link">
+                Nossa estrutura <i data-lucide="arrow-right" class="w-4 h-4 group-hover/link:translate-x-0.5 transition-transform"></i>
+              </a>
+            </div>
+
+            <div class="bg-white rounded-2xl p-8 border border-qneutral-200 flex flex-col gap-4 justify-center">
+              <h4 class="text-xs font-bold uppercase tracking-widest text-qneutral-400 border-b border-qneutral-100 pb-2">Status</h4>
+              <span class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-qgreen-50 text-qgreen-700 text-xs font-semibold w-max"><span class="w-1.5 h-1.5 rounded-full bg-qgreen-500"></span>Disponível</span>
+              <span class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-qpurple-50 text-qpurple-700 text-xs font-semibold w-max"><i data-lucide="star" class="w-3 h-3"></i>Alta demanda</span>
+              <p class="text-xs text-qneutral-500 font-mono mt-2">token: status.available</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-12 text-center">
+          <button type="button" class="text-sm font-semibold text-qpurple-600 underline underline-offset-4 hover:text-qpurple-800" onclick="document.getElementById('qd-demo-modal').classList.add('is-open')">Abrir modal de exemplo</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Produtos: contraste por plano (claro / ink intercalado) — sem animação; ritmo visual -->
+    <section id="produtos" class="ds-section w-full bg-qneutral-100 py-24 border-t border-qneutral-200">
+      <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+        <header class="mb-14 max-w-2xl">
+          <h2 class="font-editorial text-4xl md:text-5xl font-medium text-qneutral-900 mb-4 leading-tight">Linha de <span class="text-qpurple-600 italic">produtos</span></h2>
+          <p class="text-lg text-qneutral-600 leading-relaxed">Grade de catálogo com cartões claros intercalados a blocos <span class="font-mono text-sm bg-qneutral-200/70 px-1 rounded text-qneutral-800">qearth-ink</span> — o mesmo padrão do card “Qualidade auditada”: quebra de ritmo e leitura por contraste, não por movimento.</p>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+          <!-- 1 claro -->
+          <article class="bg-white rounded-2xl overflow-hidden border border-qneutral-200 flex flex-col h-full shadow-sm">
+            <div class="aspect-[4/3] bg-qneutral-100 flex items-center justify-center border-b border-qneutral-100">
+              <i data-lucide="apple" class="w-12 h-12 text-qneutral-300" aria-hidden="true"></i>
+            </div>
+            <div class="p-6 flex flex-col flex-grow">
+              <div class="flex justify-between items-start gap-2 mb-2">
+                <h3 class="font-editorial text-lg font-medium tracking-tight text-qneutral-900">Maçã Fuji</h3>
+                <span class="px-2 py-0.5 bg-qgreen-50 text-qgreen-700 rounded text-[10px] font-bold uppercase shrink-0">Catálogo</span>
+              </div>
+              <p class="text-sm text-qneutral-500 mb-5 flex-grow">Calibre homogêneo, embalagem para atacado e varejo selecionado.</p>
+              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-qneutral-50 p-3 rounded-lg border border-qneutral-100">
+                <div><span class="text-[10px] text-qneutral-500 uppercase font-semibold tracking-wide">Formato</span><span class="block text-sm font-medium text-qneutral-800">Caixa 18 kg</span></div>
+                <button type="button" class="text-sm font-semibold text-qgreen-700 border border-qgreen-300 px-3 py-1.5 rounded-lg hover:bg-qgreen-50 transition-colors shrink-0">Cotar lote</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- 2 escuro -->
+          <article class="rounded-2xl p-8 border border-qneutral-800 bg-qearth-ink text-white relative overflow-hidden flex flex-col h-full min-h-[280px]">
+            <div class="absolute top-0 right-0 w-48 h-48 bg-qpurple-500/15 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" aria-hidden="true"></div>
+            <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-qgreen-400 mb-5 border border-white/10 relative z-10">
+              <i data-lucide="truck" class="w-5 h-5" aria-hidden="true"></i>
+            </div>
+            <h3 class="font-editorial text-xl font-medium tracking-tight text-white mb-2 relative z-10">Logística programada</h3>
+            <p class="text-sm text-white/70 leading-relaxed relative z-10 mb-6 flex-grow">Rotas por região e janelas combinadas — informação que o comprador valida antes da cotação.</p>
+            <a href="#components" class="relative z-10 inline-flex items-center gap-2 text-qgreen-400 text-sm font-semibold hover:text-qgreen-300 transition-colors">
+              Ver janelas <i data-lucide="arrow-right" class="w-4 h-4" aria-hidden="true"></i>
+            </a>
+          </article>
+
+          <!-- 3 claro -->
+          <article class="bg-white rounded-2xl overflow-hidden border border-qneutral-200 flex flex-col h-full shadow-sm">
+            <div class="aspect-[4/3] bg-qneutral-100 flex items-center justify-center border-b border-qneutral-100">
+              <i data-lucide="carrot" class="w-12 h-12 text-qneutral-300" aria-hidden="true"></i>
+            </div>
+            <div class="p-6 flex flex-col flex-grow">
+              <div class="flex justify-between items-start gap-2 mb-2">
+                <h3 class="font-editorial text-lg font-medium tracking-tight text-qneutral-900">Cenoura extra</h3>
+                <span class="px-2 py-0.5 bg-qgreen-50 text-qgreen-700 rounded text-[10px] font-bold uppercase shrink-0">Safra</span>
+              </div>
+              <p class="text-sm text-qneutral-500 mb-5 flex-grow">Ideal para processamento e food service com rastreio de origem.</p>
+              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-qneutral-50 p-3 rounded-lg border border-qneutral-100">
+                <div><span class="text-[10px] text-qneutral-500 uppercase font-semibold tracking-wide">Formato</span><span class="block text-sm font-medium text-qneutral-800">Saco 25 kg</span></div>
+                <button type="button" class="text-sm font-semibold text-qgreen-700 border border-qgreen-300 px-3 py-1.5 rounded-lg hover:bg-qgreen-50 transition-colors shrink-0">Cotar lote</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- 4 escuro -->
+          <article class="rounded-2xl p-8 border border-qneutral-800 bg-qearth-ink text-white relative overflow-hidden flex flex-col h-full min-h-[280px]">
+            <div class="absolute top-0 right-0 w-48 h-48 bg-qpurple-500/15 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" aria-hidden="true"></div>
+            <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-qgreen-400 mb-5 border border-white/10 relative z-10">
+              <i data-lucide="file-text" class="w-5 h-5" aria-hidden="true"></i>
+            </div>
+            <h3 class="font-editorial text-xl font-medium tracking-tight text-white mb-2 relative z-10">Contratos sazonais</h3>
+            <p class="text-sm text-white/70 leading-relaxed relative z-10 mb-6 flex-grow">Volume e previsibilidade para a equipe de compras — bloco escuro como âncora na grade.</p>
+            <a href="#components" class="relative z-10 inline-flex items-center gap-2 text-qgreen-400 text-sm font-semibold hover:text-qgreen-300 transition-colors">
+              Solicitar proposta <i data-lucide="arrow-right" class="w-4 h-4" aria-hidden="true"></i>
+            </a>
+          </article>
+
+          <!-- 5 claro -->
+          <article class="bg-white rounded-2xl overflow-hidden border border-qneutral-200 flex flex-col h-full shadow-sm">
+            <div class="aspect-[4/3] bg-qneutral-100 flex items-center justify-center border-b border-qneutral-100">
+              <i data-lucide="grape" class="w-12 h-12 text-qneutral-300" aria-hidden="true"></i>
+            </div>
+            <div class="p-6 flex flex-col flex-grow">
+              <div class="flex justify-between items-start gap-2 mb-2">
+                <h3 class="font-editorial text-lg font-medium tracking-tight text-qneutral-900">Uva Thompson</h3>
+                <span class="px-2 py-0.5 bg-qpurple-50 text-qpurple-700 rounded text-[10px] font-bold uppercase shrink-0">Alta demanda</span>
+              </div>
+              <p class="text-sm text-qneutral-500 mb-5 flex-grow">Padrão exportação, paletização para grandes redes.</p>
+              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-qneutral-50 p-3 rounded-lg border border-qneutral-100">
+                <div><span class="text-[10px] text-qneutral-500 uppercase font-semibold tracking-wide">Formato</span><span class="block text-sm font-medium text-qneutral-800">Caixa 8,2 kg</span></div>
+                <button type="button" class="text-sm font-semibold text-qgreen-700 border border-qgreen-300 px-3 py-1.5 rounded-lg hover:bg-qgreen-50 transition-colors shrink-0">Cotar lote</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- 6 escuro -->
+          <article class="rounded-2xl p-8 border border-qneutral-800 bg-qearth-ink text-white relative overflow-hidden flex flex-col h-full min-h-[280px]">
+            <div class="absolute top-0 right-0 w-48 h-48 bg-qpurple-500/15 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none" aria-hidden="true"></div>
+            <div class="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center text-qgreen-400 mb-5 border border-white/10 relative z-10">
+              <i data-lucide="headphones" class="w-5 h-5" aria-hidden="true"></i>
+            </div>
+            <h3 class="font-editorial text-xl font-medium tracking-tight text-white mb-2 relative z-10">Suporte ao comprador</h3>
+            <p class="text-sm text-white/70 leading-relaxed relative z-10 mb-6 flex-grow">Canal direto com o time comercial para ajuste de mix e prazos.</p>
+            <a href="#hero" class="relative z-10 inline-flex items-center gap-2 text-qgreen-400 text-sm font-semibold hover:text-qgreen-300 transition-colors">
+              Falar com vendas <i data-lucide="arrow-right" class="w-4 h-4" aria-hidden="true"></i>
+            </a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Layout -->
+    <section id="layout" class="ds-section relative w-full bg-qneutral-100 py-24 border-t border-qneutral-200 bg-pattern-dots">
+      <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+        <header class="mb-12">
+          <h2 class="font-editorial text-4xl md:text-5xl font-medium text-qneutral-900 mb-4">Layout e espaçamento</h2>
+          <p class="text-lg text-qneutral-600 max-w-2xl">Container <span class="font-mono text-xs bg-white px-1 py-0.5 rounded border border-qneutral-200">max-w-[1400px]</span>, paddings laterais generosos e grids previsíveis — padrão v5 mantido.</p>
+        </header>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+          <div>
+            <h3 class="text-xs font-bold uppercase tracking-widest text-qneutral-400 mb-4">Grid de catálogo</h3>
+            <div class="grid grid-cols-3 gap-3">
+              <div class="bg-qneutral-200 rounded-lg h-20 flex items-center justify-center font-mono text-[10px] text-qneutral-500">1/3</div>
+              <div class="bg-qneutral-200 rounded-lg h-20 flex items-center justify-center font-mono text-[10px] text-qneutral-500">1/3</div>
+              <div class="bg-qneutral-200 rounded-lg h-20 flex items-center justify-center font-mono text-[10px] text-qneutral-500">1/3</div>
+            </div>
+          </div>
+          <div>
+            <h3 class="text-xs font-bold uppercase tracking-widest text-qneutral-400 mb-4">Escala de respiro</h3>
+            <div class="space-y-3 text-sm text-qneutral-600">
+              <div class="flex items-center gap-3"><span class="w-4 h-4 bg-qgreen-500 rounded-sm shrink-0"></span><span class="font-mono text-xs">16px — controles</span></div>
+              <div class="flex items-center gap-3"><span class="w-6 h-6 bg-qgreen-500 rounded-sm shrink-0"></span><span class="font-mono text-xs">24px — blocos internos</span></div>
+              <div class="flex items-center gap-3"><span class="w-10 h-10 bg-qgreen-500 rounded-sm shrink-0"></span><span class="font-mono text-xs">40px+ — seções</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Motion: painel v6 + utilitários v5 -->
+    <section id="motion" class="ds-section w-full bg-qneutral-50 py-24 border-t border-qneutral-200">
+      <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+        <header class="mb-12">
+          <h2 class="font-editorial text-4xl md:text-5xl font-medium text-qneutral-900 mb-4">Motion e interação</h2>
+          <p class="text-lg text-qneutral-600 max-w-2xl">Mais rico que o v5, mais disciplinado que excessos do v6: painel em hover, entradas escalonadas e microelevação em cards — sempre com intenção comercial.</p>
+          <p class="mt-4 text-sm text-qneutral-600 max-w-2xl border-l-2 border-qpurple-200 pl-4"><strong class="text-qneutral-800">Beams verticais</strong> (<code class="font-mono text-xs bg-qneutral-100 px-1 rounded">beam-fall</code>, <code class="font-mono text-xs bg-qneutral-100 px-1 rounded">.animate-beam-*</code>): classes permanecem definidas neste arquivo só como referência técnica do DS — <strong class="text-qneutral-800">não usar no site público</strong> (ex.: WordPress); em produção tendem a parecer bug ou ruído. Opcional: demo isolada com opacidade baixa e teste com usuários não designers.</p>
+        </header>
+
+        <div class="grid md:grid-cols-2 gap-10 mb-12">
+          <div>
+            <h3 class="text-xs font-bold uppercase tracking-widest text-qpurple-600 mb-4">Painel no hover</h3>
+            <div class="relative group overflow-hidden h-52 rounded-2xl border border-qneutral-800 bg-qearth-ink shadow-lg">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent pointer-events-none z-[1]"></div>
+              <div class="absolute bottom-0 left-0 p-5 z-[2]">
+                <h4 class="font-sans text-xl font-semibold text-white">Detalhe no hover</h4>
+                <p class="text-xs text-white/70 mt-1 max-w-[200px]">Passe o cursor na área escura.</p>
+              </div>
+              <div class="absolute inset-y-0 right-0 w-[55%] bg-qgreen-600/90 backdrop-blur-md translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out z-[3] flex items-end p-5 border-l border-white/10">
+                <p class="text-white text-xs leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">
+                  Conteúdo complementar entra pela direita — útil para specs, SLA ou próximo passo sem poluir o estado inicial.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div>
+            <h3 class="text-xs font-bold uppercase tracking-widest text-qpurple-600 mb-4">Stagger ao scroll</h3>
+            <div class="flex flex-wrap gap-3">
+              <div class="animate-on-scroll [animation:animationIn_0.7s_ease-out_0s_both] px-4 py-3 rounded-xl bg-white border border-qneutral-200 text-sm font-medium shadow-sm">0 ms</div>
+              <div class="animate-on-scroll [animation:animationIn_0.7s_ease-out_0.12s_both] px-4 py-3 rounded-xl bg-white border border-qneutral-200 text-sm font-medium shadow-sm">120 ms</div>
+              <div class="animate-on-scroll [animation:animationIn_0.7s_ease-out_0.24s_both] px-4 py-3 rounded-xl bg-white border border-qneutral-200 text-sm font-medium shadow-sm">240 ms</div>
+            </div>
+            <p class="text-xs text-qneutral-500 mt-4 font-mono">Classe .animate-on-scroll + .animate via IntersectionObserver</p>
+          </div>
+        </div>
+
+        <div class="grid sm:grid-cols-3 gap-6">
+          <div class="bg-white rounded-2xl p-6 border border-qneutral-200 card-premium cursor-default">
+            <h4 class="font-sans font-semibold text-qneutral-900 mb-1">Card lift</h4>
+            <p class="text-xs text-qneutral-500 font-mono">translateY + sombra suave</p>
+          </div>
+          <div class="bg-white rounded-2xl p-6 border border-qneutral-200 group cursor-pointer">
+            <h4 class="font-sans font-semibold text-qneutral-900 mb-1">Área com escala</h4>
+            <div class="h-14 bg-qneutral-100 rounded-lg overflow-hidden mt-3">
+              <div class="h-full w-full bg-qgreen-200 group-hover:scale-105 transition-transform duration-500 origin-center"></div>
+            </div>
+          </div>
+          <div class="bg-white rounded-2xl p-6 border border-qneutral-200">
+            <h4 class="font-sans font-semibold text-qneutral-900 mb-1">Glow em CTA primário</h4>
+            <p class="text-xs text-qneutral-500 mb-3">Verde, glow sutil no hover — uso comercial.</p>
+            <button type="button" class="btn-glow-green text-xs px-4 py-2 rounded-lg font-semibold">Demo</button>
+          </div>
+        </div>
+
+        <div class="mt-10 rounded-2xl border border-dashed border-qneutral-300 bg-qneutral-100/50 p-6">
+          <h3 class="text-xs font-bold uppercase tracking-widest text-qneutral-500 mb-2">Referência técnica — beams (não usar no front público)</h3>
+          <p class="text-sm text-qneutral-600 mb-4 max-w-2xl">Demonstração isolada; no site real, omitir ou reduzir opacidade drasticamente após teste com leigos.</p>
+          <div class="relative h-36 max-w-xs mx-auto rounded-xl border border-qneutral-200 bg-qneutral-50 overflow-hidden" aria-hidden="true">
+            <div class="absolute top-0 left-[35%] w-px h-32 bg-gradient-to-b from-transparent via-qgreen-500/20 to-transparent animate-beam-1"></div>
+            <div class="absolute top-0 left-[55%] w-px h-32 bg-gradient-to-b from-transparent via-qpurple-500/22 to-transparent animate-beam-2"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ícones -->
+    <section id="icons" class="ds-section w-full bg-qneutral-100 py-24 border-t border-qneutral-200 pb-28">
+      <div class="max-w-[1400px] mx-auto px-6 lg:px-12">
+        <header class="mb-12">
+          <h2 class="font-editorial text-4xl md:text-5xl font-medium text-qneutral-900 mb-4">Ícones</h2>
+          <p class="text-lg text-qneutral-600 max-w-2xl"><strong>Lucide</strong> como padrão único para UI comercial — peso e tamanho alinhados ao texto (16–24px).</p>
+        </header>
+        <div class="grid grid-cols-4 md:grid-cols-8 gap-3">
+          <div class="flex flex-col items-center p-4 bg-white rounded-xl border border-qneutral-200 text-qneutral-500 hover:shadow-md transition-shadow">
+            <i data-lucide="leaf" class="w-6 h-6 mb-1 text-qgreen-600"></i>
+            <span class="text-[10px] font-mono">leaf</span>
+          </div>
+          <div class="flex flex-col items-center p-4 bg-white rounded-xl border border-qneutral-200 hover:shadow-md transition-shadow">
+            <i data-lucide="apple" class="w-6 h-6 mb-1 text-qneutral-400"></i>
+            <span class="text-[10px] font-mono text-qneutral-500">apple</span>
+          </div>
+          <div class="flex flex-col items-center p-4 bg-white rounded-xl border border-qneutral-200 hover:shadow-md transition-shadow">
+            <i data-lucide="truck" class="w-6 h-6 mb-1 text-qpurple-600"></i>
+            <span class="text-[10px] font-mono text-qneutral-500">truck</span>
+          </div>
+          <div class="flex flex-col items-center p-4 bg-white rounded-xl border border-qneutral-200 hover:shadow-md transition-shadow">
+            <i data-lucide="package" class="w-6 h-6 mb-1"></i>
+            <span class="text-[10px] font-mono text-qneutral-500">package</span>
+          </div>
+          <div class="flex flex-col items-center p-4 bg-white rounded-xl border border-qneutral-200 hover:shadow-md transition-shadow">
+            <i data-lucide="shield-check" class="w-6 h-6 mb-1"></i>
+            <span class="text-[10px] font-mono text-qneutral-500">shield</span>
+          </div>
+          <div class="flex flex-col items-center p-4 bg-white rounded-xl border border-qneutral-200 hover:shadow-md transition-shadow">
+            <i data-lucide="map-pin" class="w-6 h-6 mb-1"></i>
+            <span class="text-[10px] font-mono text-qneutral-500">map-pin</span>
+          </div>
+          <div class="flex flex-col items-center p-4 bg-white rounded-xl border border-qneutral-200 hover:shadow-md transition-shadow">
+            <i data-lucide="store" class="w-6 h-6 mb-1"></i>
+            <span class="text-[10px] font-mono text-qneutral-500">store</span>
+          </div>
+          <div class="flex flex-col items-center p-4 bg-white rounded-xl border border-qneutral-200 hover:shadow-md transition-shadow">
+            <i data-lucide="file-text" class="w-6 h-6 mb-1"></i>
+            <span class="text-[10px] font-mono text-qneutral-500">file-text</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-qneutral-900 text-white pt-20 pb-10 rounded-t-[2.5rem] mt-8 relative overflow-hidden bg-pattern-grid-light border-t border-white/5">
+    <div class="absolute top-0 right-0 w-[520px] h-[520px] bg-qpurple-500/8 rounded-full blur-[90px] -translate-y-1/2 translate-x-1/4 pointer-events-none"></div>
+    <div class="max-w-[1400px] mx-auto px-6 lg:px-12 relative z-10">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-10 border-b border-white/10 pb-12">
+        <div>
+          <span class="text-2xl font-semibold text-white tracking-tight block mb-4">QDelícia Frutas</span>
+          <p class="text-sm text-qneutral-400 max-w-md leading-relaxed">
+            Design System v7 — consolidação final: espinha dorsal do v5 refinado, atmosfera e profundidade controladas, tipografia e disciplina fechadas para produção.
+          </p>
+        </div>
+        <div class="flex flex-col justify-end md:items-end text-sm text-qneutral-500">
+          <p class="font-mono text-xs text-qneutral-500 mb-2">release: ds-v7-final</p>
+          <p>© 2026 QDelícia Frutas</p>
+        </div>
+      </div>
+      <div class="flex flex-col sm:flex-row justify-between items-center gap-3 pt-8 text-qneutral-500 text-sm">
+        <span>Documentação viva — aplicar no site institucional B2B</span>
+        <span class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-qgreen-500"></span>Pronto para handoff</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modal -->
+  <div id="qd-demo-modal" class="qd-modal-backdrop fixed inset-0 z-[200] flex items-center justify-center p-6 bg-qearth-ink/50 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="qd-modal-title">
+    <div class="qd-modal-panel relative w-full max-w-md rounded-2xl bg-qneutral-50 border border-qneutral-200 shadow-2xl overflow-hidden">
+      <button type="button" class="absolute top-4 right-4 p-2 rounded-full hover:bg-qneutral-200/80 transition-colors text-qneutral-600" onclick="document.getElementById('qd-demo-modal').classList.remove('is-open')" aria-label="Fechar">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+      <div class="p-8 pt-12">
+        <div class="w-12 h-12 rounded-xl bg-qgreen-100 flex items-center justify-center mb-4">
+          <i data-lucide="message-circle" class="w-6 h-6 text-qgreen-700"></i>
+        </div>
+        <h2 id="qd-modal-title" class="font-editorial text-2xl font-medium text-qneutral-900 mb-2">Falar com o time</h2>
+        <p class="text-sm text-qneutral-600 leading-relaxed mb-6">Modal de exemplo com transição de painel. No produto, use para formulário curto ou confirmação.</p>
+        <div class="flex gap-3">
+          <button type="button" class="flex-1 btn-glow-green py-3 rounded-xl text-sm font-semibold" onclick="document.getElementById('qd-demo-modal').classList.remove('is-open')">Enviar</button>
+          <button type="button" class="flex-1 py-3 rounded-xl text-sm font-semibold border border-qneutral-300 bg-white hover:bg-qneutral-100 transition-colors" onclick="document.getElementById('qd-demo-modal').classList.remove('is-open')">Depois</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (window.lucide) lucide.createIcons();
+
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) entry.target.classList.add('animate');
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+      document.querySelectorAll('.animate-on-scroll').forEach(function (el) { observer.observe(el); });
+
+      var modal = document.getElementById('qd-demo-modal');
+      modal.addEventListener('click', function (e) { if (e.target === modal) modal.classList.remove('is-open'); });
+    });
+  </script>
+</body>
+</html>
