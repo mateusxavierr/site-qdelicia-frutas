@@ -3,46 +3,47 @@
 import type { ReactNode } from "react";
 import Image from "next/image";
 import { Camera } from "lucide-react";
+import { asset } from "@/lib/assetPath";
 
 const presencePhotos = [
   {
     id: 1,
-    image: "/assets/eventos/maior.jpg",
+    image: asset("/assets/eventos/maior.jpg"),
     alt: "QDelícia Frutas — destaque na operação",
   },
   {
     id: 2,
-    image: "/assets/eventos/menor.jpg",
+    image: asset("/assets/eventos/menor.jpg"),
     alt: "Registro da operação QDelícia",
   },
   {
     id: 3,
-    image: "/assets/eventos/menor2.jpg",
+    image: asset("/assets/eventos/menor2.jpg"),
     alt: "Registro da operação QDelícia",
   },
   {
     id: 4,
-    image: "/assets/eventos/menor3.jpg",
+    image: asset("/assets/eventos/menor3.jpg"),
     alt: "Registro da operação QDelícia",
   },
   {
     id: 5,
-    image: "/assets/eventos/menor4.jpg",
+    image: asset("/assets/eventos/menor4.jpg"),
     alt: "Registro da operação QDelícia",
   },
   {
     id: 6,
-    image: "/assets/eventos/menor5.jpg",
+    image: asset("/assets/eventos/menor5.jpg"),
     alt: "Registro da operação QDelícia",
   },
   {
     id: 7,
-    image: "/assets/eventos/menor6.jpg",
+    image: asset("/assets/eventos/menor6.jpg"),
     alt: "Registro da operação QDelícia",
   },
   {
     id: 8,
-    image: "/assets/eventos/medio.jpg",
+    image: asset("/assets/eventos/medio.jpg"),
     alt: "QDelícia Frutas — presença no varejo",
   },
 ] as const;

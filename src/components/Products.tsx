@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import Image from 'next/image';
+import { asset } from '@/lib/assetPath';
 
 interface Product {
   id: string;
@@ -15,67 +16,67 @@ const products: Product[] = [
   {
     id: 'banana',
     name: 'Banana',
-    image: '/assets/frutas/banana.png',
+    image: asset('/assets/frutas/banana.png'),
     variations: ['Prata', 'Nanica', 'D\'água', 'Terra']
   },
   {
     id: 'mamao',
     name: 'Mamão',
-    image: '/assets/frutas/mamao.png',
+    image: asset('/assets/frutas/mamao.png'),
     variations: ['Formosa', 'Papaya']
   },
   {
     id: 'melao',
     name: 'Melão',
-    image: '/assets/frutas/melao.png',
+    image: asset('/assets/frutas/melao.png'),
     variations: ['Amarelo', 'Pele de Sapo']
   },
   {
     id: 'melancia',
     name: 'Melancia',
-    image: '/assets/frutas/melancia.png',
+    image: asset('/assets/frutas/melancia.png'),
   },
   {
     id: 'uva',
     name: 'Uva',
-    image: '/assets/frutas/uva.png',
+    image: asset('/assets/frutas/uva.png'),
   },
   {
     id: 'pera',
     name: 'Pera',
-    image: '/assets/frutas/pera.png',
+    image: asset('/assets/frutas/pera.png'),
   },
   {
     id: 'goiaba',
     name: 'Goiaba',
-    image: '/assets/frutas/goiaba.png',
+    image: asset('/assets/frutas/goiaba.png'),
   },
   {
     id: 'abacaxi',
     name: 'Abacaxi',
-    image: '/assets/frutas/abacaxi.png',
+    image: asset('/assets/frutas/abacaxi.png'),
   },
   {
     id: 'laranja',
     name: 'Laranja',
-    image: '/assets/frutas/laranja.png',
+    image: asset('/assets/frutas/laranja.png'),
     variations: ['Pera', 'Lima']
   },
   {
     id: 'maca',
     name: 'Maçã',
-    image: '/assets/frutas/maca.png',
+    image: asset('/assets/frutas/maca.png'),
   },
   {
     id: 'hidroponicos',
     name: 'Hidropônicos',
-    image: '/assets/frutas/hidroponico.png',
+    image: asset('/assets/frutas/hidroponico.png'),
     variations: ['Crespa', 'Roxa', 'Lisa', 'Americana']
   },
   {
     id: 'tomate',
     name: 'Tomate Suit Grape',
-    image: '/assets/frutas/tomate.png',
+    image: asset('/assets/frutas/tomate.png'),
   }
 ];
 

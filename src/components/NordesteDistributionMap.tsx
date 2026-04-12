@@ -2,7 +2,9 @@
 
 import Image from "next/image";
 
-const MAP_SRC = "/assets/maps/mapa-distribuicao.png";
+import { asset } from "@/lib/assetPath";
+
+const MAP_SRC = asset("/assets/maps/mapa-distribuicao.png");
 const MAP_W = 1024;
 const MAP_H = 1024;
 

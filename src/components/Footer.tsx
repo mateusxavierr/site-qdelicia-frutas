@@ -2,6 +2,7 @@
 
 import { Leaf } from 'lucide-react';
 import Image from 'next/image';
+import { asset } from '@/lib/assetPath';
 
 export function Footer() {
   return (
@@ -17,7 +18,7 @@ export function Footer() {
           <div className="flex flex-col items-center text-center md:col-span-5 lg:col-span-4">
             <div className="mb-6 flex w-full justify-center">
               <Image
-                src="/assets/brand/logo-qdelicia.png"
+                src={asset("/assets/brand/logo-qdelicia.png")}
                 alt="QDelícia Frutas"
                 width={243}
                 height={165}

@@ -1,3 +1,4 @@
+import { asset } from '@/lib/assetPath';
 import { Header } from '@/components/Header';
 import { Hero } from '@/components/Hero';
 import { WhatsAppFloat } from '@/components/WhatsAppFloat';
@@ -20,7 +21,10 @@ export default function Home() {
         {/* 2. Barra de Credibilidade */}
         <section className="bg-transparent pb-14 pt-8 lg:pt-10 relative px-6 lg:px-12 -mt-20 lg:-mt-24 z-20">
           <div className="max-w-[1400px] mx-auto bg-qearth-ink rounded-[1.5rem] md:rounded-[2rem] border border-qneutral-800 shadow-[0_20px_40px_rgb(0,0,0,0.12)] overflow-hidden relative group">
-            <div className="absolute inset-0 bg-[url('/assets/noise.png')] opacity-5 mix-blend-overlay"></div>
+            <div
+              className="absolute inset-0 opacity-5 mix-blend-overlay"
+              style={{ backgroundImage: `url(${asset('/assets/noise.png')})` }}
+            />
             <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-qgreen-500/10 rounded-full blur-[80px] -translate-y-1/2 translate-x-1/4 pointer-events-none transition-opacity duration-700 group-hover:opacity-70"></div>
             <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-qpurple-500/10 rounded-full blur-[60px] translate-y-1/3 -translate-x-1/4 pointer-events-none"></div>
             

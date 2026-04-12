@@ -3,11 +3,12 @@
 import { useCallback, useEffect, useId, useState } from "react";
 import Image from "next/image";
 import { Play, X } from "lucide-react";
+import { asset } from "@/lib/assetPath";
 
 const YOUTUBE_VIDEO_ID = "oDEzUfK-iU8";
 const YOUTUBE_EMBED = `https://www.youtube.com/embed/${YOUTUBE_VIDEO_ID}?rel=0&modestbranding=1&autoplay=1`;
 const VIDEO_THUMB_YT = `https://i.ytimg.com/vi/${YOUTUBE_VIDEO_ID}/hqdefault.jpg`;
-const ORIGEM_BG = "/assets/about/historia-origem-bg.png";
+const ORIGEM_BG = asset("/assets/about/historia-origem-bg.png");
 
 export function About() {
   const [videoOpen, setVideoOpen] = useState(false);

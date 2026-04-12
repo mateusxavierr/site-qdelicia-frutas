@@ -1,6 +1,7 @@
 "use client";
 
 import { Phone, MapPin, Globe, ArrowRight, Truck } from "lucide-react";
+import { asset } from "@/lib/assetPath";
 import { NordesteDistributionMap } from "./NordesteDistributionMap";
 
 export function Distribution() {
@@ -47,7 +48,10 @@ export function Distribution() {
         {/* Módulo escuro — cobertura */}
         <div className="dist-animate-rise dist-animate-rise-delay-1 mb-12 lg:mb-16">
           <div className="group/cov relative overflow-hidden rounded-[1.75rem] border border-white/10 bg-qearth-ink shadow-[0_24px_56px_-18px_rgba(0,0,0,0.42)]">
-            <div className="absolute inset-0 bg-[url('/assets/noise.png')] opacity-[0.06] mix-blend-overlay" />
+            <div
+              className="absolute inset-0 opacity-[0.06] mix-blend-overlay"
+              style={{ backgroundImage: `url(${asset("/assets/noise.png")})` }}
+            />
             <div className="absolute inset-0 bg-gradient-to-br from-white/[0.04] via-transparent to-transparent" />
             <div className="absolute right-0 top-0 h-[min(100%,420px)] w-[420px] -translate-y-1/3 translate-x-1/4 rounded-full bg-qgreen-500/[0.11] blur-[88px] transition-opacity duration-1000 group-hover/cov:opacity-90" />
             <div className="absolute bottom-0 left-0 h-[320px] w-[320px] translate-y-1/3 -translate-x-1/4 rounded-full bg-qpurple-500/[0.12] blur-[72px]" />
