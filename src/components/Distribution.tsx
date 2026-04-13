@@ -67,16 +67,16 @@ export function Distribution() {
                     </span>
                   </span>
                 </div>
-                <p className="font-editorial flex flex-wrap items-center justify-center gap-x-2 gap-y-3 text-[2.35rem] font-medium leading-none tracking-tight text-white sm:text-[3.25rem] md:text-[3.75rem] lg:justify-start">
-                  <span className="dist-animate-rise dist-animate-rise-delay-1 inline-block">PE</span>
-                  <span className="text-white/25 font-light sm:mx-0.5">·</span>
-                  <span className="dist-animate-rise dist-animate-rise-delay-2 inline-block">PB</span>
-                  <span className="text-white/25 font-light sm:mx-0.5">·</span>
-                  <span className="dist-animate-rise dist-animate-rise-delay-3 inline-block">RN</span>
-                  <span className="text-white/25 font-light sm:mx-0.5">·</span>
-                  <span className="dist-animate-rise dist-animate-rise-delay-4 inline-block">AL</span>
-                  <span className="text-white/25 font-light sm:mx-0.5">·</span>
-                  <span className="dist-animate-rise dist-animate-rise-delay-5 inline-block">BA</span>
+                <p className="font-editorial flex max-lg:flex-nowrap max-lg:justify-center max-lg:gap-x-1 max-lg:gap-y-0 max-lg:!text-[clamp(1.625rem,7vw+0.375rem,2.2rem)] max-lg:tracking-tight lg:flex-wrap lg:justify-start lg:gap-x-2 lg:gap-y-3 lg:text-[3.75rem] items-center justify-center gap-x-2 gap-y-3 text-[2.35rem] font-medium leading-none tracking-tight text-white sm:text-[3.25rem] md:text-[3.75rem]">
+                  <span className="dist-animate-rise dist-animate-rise-delay-1 inline-block shrink-0">PE</span>
+                  <span className="shrink-0 text-white/25 font-light max-lg:mx-px sm:mx-0.5">·</span>
+                  <span className="dist-animate-rise dist-animate-rise-delay-2 inline-block shrink-0">PB</span>
+                  <span className="shrink-0 text-white/25 font-light max-lg:mx-px sm:mx-0.5">·</span>
+                  <span className="dist-animate-rise dist-animate-rise-delay-3 inline-block shrink-0">RN</span>
+                  <span className="shrink-0 text-white/25 font-light max-lg:mx-px sm:mx-0.5">·</span>
+                  <span className="dist-animate-rise dist-animate-rise-delay-4 inline-block shrink-0">AL</span>
+                  <span className="shrink-0 text-white/25 font-light max-lg:mx-px sm:mx-0.5">·</span>
+                  <span className="dist-animate-rise dist-animate-rise-delay-5 inline-block shrink-0">BA</span>
                 </p>
               </div>
 

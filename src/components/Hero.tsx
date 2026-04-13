@@ -12,8 +12,8 @@ export function Hero() {
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808008_1px,transparent_1px),linear-gradient(to_bottom,#80808008_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none"></div>
       
       {/* Glows Estruturais e Limpos */}
-      <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-gradient-to-bl from-qgreen-100/40 via-qpurple-50/20 to-transparent rounded-full blur-3xl opacity-70 pointer-events-none -translate-y-1/2 translate-x-1/3"></div>
-      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-gradient-to-tr from-qpurple-100/40 to-transparent rounded-full blur-3xl opacity-60 pointer-events-none translate-y-1/3 -translate-x-1/3"></div>
+      <div className="absolute top-0 right-0 w-[800px] h-[800px] max-lg:w-[520px] max-lg:h-[520px] bg-gradient-to-bl from-qgreen-100/40 via-qpurple-50/20 to-transparent rounded-full blur-3xl max-lg:blur-2xl opacity-70 max-lg:opacity-50 pointer-events-none -translate-y-1/2 translate-x-1/3"></div>
+      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] max-lg:w-[420px] max-lg:h-[420px] bg-gradient-to-tr from-qpurple-100/40 to-transparent rounded-full blur-3xl max-lg:blur-2xl opacity-60 max-lg:opacity-45 pointer-events-none translate-y-1/3 -translate-x-1/3"></div>
 
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12 relative z-10 w-full flex-1 flex flex-col justify-center">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-14 lg:gap-8 items-center">
@@ -50,13 +50,13 @@ export function Hero() {
               {/* CTA 1: Pedir Orçamento */}
               <a 
                 href="#orcamento"
-                className="btn-glow-green relative px-8 py-4 rounded-full text-[15px] font-bold text-qneutral-900 inline-flex items-center justify-center gap-2.5 shadow-[0_4px_20px_rgba(133,194,38,0.25)] hover:shadow-[0_12px_30px_rgba(133,194,38,0.4)] transition-all duration-300 hover:-translate-y-[2px] group"
+                className="hero-orcamento-cta btn-glow-green relative px-8 py-4 rounded-full text-[15px] font-bold text-qneutral-900 inline-flex items-center justify-center gap-2.5 shadow-[0_4px_20px_rgba(133,194,38,0.25)] hover:shadow-[0_12px_30px_rgba(133,194,38,0.4)] transition-all duration-300 hover:-translate-y-[2px] max-lg:hover:-translate-y-0 max-lg:hover:shadow-[0_4px_20px_rgba(133,194,38,0.25)] max-lg:active:shadow-[0_4px_20px_rgba(133,194,38,0.25)] group [-webkit-tap-highlight-color:transparent]"
               >
-                <span className="absolute inset-0 rounded-full overflow-hidden pointer-events-none [transform:translateZ(0)]">
-                  <span className="absolute top-0 -left-[100%] w-[60%] h-full bg-gradient-to-r from-transparent via-white/50 to-transparent skew-x-[-25deg] group-hover:left-[200%] transition-all duration-700 ease-out"></span>
+                <span className="absolute inset-0 hidden rounded-full overflow-hidden pointer-events-none [transform:translateZ(0)] lg:block" aria-hidden="true">
+                  <span className="absolute top-0 -left-[100%] w-[60%] h-full bg-gradient-to-r from-transparent via-white/50 to-transparent skew-x-[-25deg] transition-all duration-700 ease-out group-hover:left-[200%]"></span>
                 </span>
                 <span className="relative z-10 tracking-[0.02em]">Pedir orçamento</span>
-                <ArrowRight className="w-4 h-4 relative z-10 group-hover:translate-x-1 transition-transform duration-300" />
+                <ArrowRight className="w-4 h-4 relative z-10 transition-transform duration-300 lg:group-hover:translate-x-1" />
               </a>
               
               {/* CTA 2: WhatsApp */}
@@ -99,7 +99,7 @@ export function Hero() {
           </div>
 
           {/* Coluna da Direita (Stack Premium de Cards) */}
-          <div className="lg:col-span-6 xl:col-span-7 flex justify-center lg:justify-center animate-[fadeSlideIn_1s_ease-out_0.2s_both] mt-12 lg:mt-0">
+          <div className="lg:col-span-6 xl:col-span-7 flex w-full justify-center animate-[fadeSlideIn_1s_ease-out_0.2s_both] mt-12 lg:mt-0">
             <HeroCards />
           </div>
         </div>
